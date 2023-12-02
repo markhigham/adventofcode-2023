@@ -1,32 +1,27 @@
-const readline = require("node:readline");
+const readFileFromStdIn = require('../common/fileReader')
 
 function getDigit(word) {
-    for (let i = 0; i < word.length; i++) {
-        const num = Number(word[i])
-        if (!isNaN(num)) {
-            return num
-        }
+  for (let i = 0; i < word.length; i++) {
+    const num = Number(word[i])
+    if (!isNaN(num)) {
+      return num
     }
+  }
 }
 
+// 55477
 
-const rl = readline.createInterface({
-    input: process.stdin,
-});
+readFileFromStdIn()
+  .then((lines) => {
+    const value = lines.reduce((sum, line) => {
+      const first = getDigit(line)
 
-let sum = 0;
+      const reversed = line.split('').reverse().join('')
+      const second = getDigit(reversed)
+      const total = Number(`${first}${second}`)
+      return sum + total
+    }, 0)
 
-rl.on("line", (line) => {
-    const first = getDigit(line);
-
-    const reversed = line.split("").reverse().join("");
-    const second = getDigit(reversed);
-
-    const total = Number(`${first}${second}`);
-    sum += total;
-    console.log(first, second, total);
-});
-
-rl.on('close', () => {
-    console.log(sum)
-})
+    console.log(value)
+  })
+  .catch((err) => console.error(err))
